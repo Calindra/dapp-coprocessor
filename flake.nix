@@ -58,6 +58,7 @@
             glibc
             nodejs_20
             cargo-binstall
+            solc
           ];
 
           shellHook = ''
