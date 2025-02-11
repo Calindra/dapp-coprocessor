@@ -3,3 +3,8 @@
 /node_modules
 yarn.lock
 .direnv/
+output.car
+output.car.json
+output.cid
+output.size
+

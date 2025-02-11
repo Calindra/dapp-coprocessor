@@ -100,6 +100,47 @@ CARIZE::  Cumulative size extracted to output.size successfully!
 docker logs -f cartesi-coprocessor-operator
 ```
 
-cast send <contract_address> "runExecution(bytes)" <hex_encoded_input> \
-    --rpc-url <your_rpc_url> \
-    --private-key <your_private_key>
+```sh
+cartesi-coprocessor address-book
+```
+
+```sh
+cartesi-coprocessor address-book
+Machine Hash         0xc604befefeead1aa2dfe897e8e85d7dc058c205049750e071460ded54bf9c2dc
+Devnet_task_issuer   0x95401dc811bb5740090279Ba06cfA8fcF6113778
+Testnet_task_issuer  0xff35E413F5e22A9e1Cc02F92dcb78a5076c1aaf3
+payment_token        0xc5a5C42992dECbae36851359345FE25997F5C42d
+```
+
+the first arg is the task id, the second arg is the machine hash
+
+```sh
+cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xc604befefeead1aa2dfe897e8e85d7dc058c205049750e071460ded54bf9c2dc
+```
+
+```sh
+FORGE::RESPONSE:: No files changed, compilation skipped
+Deployer: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Deployed to: 0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f
+Transaction hash: 0x8253d9713e29e13cd6504e9e06121137bebf9f103433a699d7df6609a0416ae3
+
+Creating directory to record deployments at "/workspaces/dapp-coprocessor/contracts/deployment_history"
+✅ Deployment info saved successfully.
+```
+
+Send an input:
+
+```sh
+cast send 0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f "runExecution(bytes)" 0xdeadbeef \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+You should see something like this log below on the operator terminal
+
+```sh
+[INFO  rollup_http_server::http_service] received new request of type ADVANCE
+[INFO  actix_web::middleware::logger] 127.0.0.1 "POST /finish HTTP/1.1" 200 344 "-" "node" 0.031488
+Received finish status 200
+Received advance request data {"metadata":{"chain_id":0,"app_contract":"0x0000000000000000000000000000000000000000","msg_sender":"0x0000000000000000000000000000000000000000","block_number":0,"block_timestamp":0,"prev_randao":"0x0000000000000000000000000000000000000000000000000000000000000000","input_index":0},"payload":"0xdeadbeef"}
+```
