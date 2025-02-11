@@ -59,6 +59,12 @@
             nodejs_22
             cargo-binstall
           ];
+
+          shellHook = ''
+            echo "Hello from coprocessor"
+            # cargo-binstall cartesi-coprocessor
+            # npm ci
+          '';
         };
       }
     );
