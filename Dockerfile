@@ -61,6 +61,8 @@ RUN mkdir -p ${OLLAMA_MODELS} \
 
 COPY --from=agentic /root/.ollama/models/ ${OLLAMA_MODELS}/
 
+RUN touch /tmp/ollama.log && chmod 777 /tmp/ollama.log
+
 ENV ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004"
 
 ENTRYPOINT ["rollup-init"]

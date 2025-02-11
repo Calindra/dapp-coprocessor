@@ -185,8 +185,35 @@ cast send $DAPP_ADDRESS "runExecution(bytes)" 0x636174202f746d702f6f6c6c616d612e
 ```
 
 send hi
+
 ```sh
 cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6c6c6d206869 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+2e2f6f6c6c616d61207365727665
+
+bash -c "ps aux | grep ollama"
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x62617368202d632022707320617578207c2067726570206f6c6c616d6122 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+ls -lah
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6c73202d6c6168 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+whoami
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x77686f616d69 \
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
