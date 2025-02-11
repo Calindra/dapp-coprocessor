@@ -56,7 +56,7 @@
             openssl
             llvmPackages_19.libclang
             glibc
-            nodejs_22
+            nodejs_20
             cargo-binstall
           ];
 
