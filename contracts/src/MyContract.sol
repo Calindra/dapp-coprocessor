@@ -14,7 +14,7 @@ contract MyContract is CoprocessorAdapter {
     }
 
     function handleNotice(bytes32 payloadHash, bytes memory notice) internal override {
-        // Add logic for handling callback from co-processor containing notices.
+        emit ResultReceived(payloadHash, notice);
     }
 
     // Add your other app logic here

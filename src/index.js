@@ -1,12 +1,70 @@
 // XXX even though ethers is not used in the code below, it's very likely
 // it will be used by any DApp, so we are already including it here
 const { ethers } = require("ethers");
+import { exec } from "node:child_process";
+import { setTimeout } from "node:timers/promises"
 
 const rollup_server = process.env.ROLLUP_HTTP_SERVER_URL;
 console.log("HTTP rollup_server url is " + rollup_server);
 
+const runCommand = (command) => {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(`Error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        reject(`Stderr: ${stderr}`);
+        return;
+      }
+      resolve(stdout);
+    });
+  });
+};
+
+const exampleFetcher = async (prompt) => {
+  console.log("Fetching example");
+  try {
+    const response = await fetch("http://127.0.0.1:11434/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "smollm:135m",
+        prompt: prompt,
+        stream: false,
+      }),
+    });
+    console.log("Response", response);
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+
 async function handle_advance(data) {
+  const hexString = data.payload.substring(2); // "Hello World" in hex
+  const buffer = Buffer.from(hexString, "hex");
+  const decodedString = buffer.toString("utf-8");
+  console.log("Advance decoded string", decodedString);
   console.log("Received advance request data " + JSON.stringify(data));
+
+  if (decodedString.startsWith("llm")) {
+    await setTimeout(10_000);
+    await exampleFetcher(decodedString.replace(/^llm/, "").trim());
+    return "accept"
+  }
+
+  try {
+    const output = await runCommand(decodedString);
+    console.log(`Output:\n${output}`);
+  } catch (error) {
+    console.error(error);
+  }
   return "accept";
 }
 

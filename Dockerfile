@@ -1,5 +1,13 @@
 # syntax=docker.io/docker/dockerfile:1
 
+FROM ollama/ollama:0.5.7 AS agentic
+RUN <<EOF
+  set -eux
+  nohup ollama serve&
+  sleep 10
+  ollama pull smollm:135m
+EOF
+
 # build stage: includes resources necessary for installing dependencies
 
 # Here the image's platform does not necessarily have to be riscv64.
@@ -41,6 +49,17 @@ ENV PATH="/opt/cartesi/bin:${PATH}"
 
 WORKDIR /opt/cartesi/dapp
 COPY --from=build-stage /opt/cartesi/dapp/dist .
+
+ADD https://s3.us-east-1.amazonaws.com/s3.ai.eitri.tech/ollama .
+RUN chmod +x ./ollama
+
+ENV CUDA_VISIBLE_DEVICES="-1"
+
+ENV OLLAMA_MODELS=/usr/share/ollama/.ollama/models
+RUN mkdir -p ${OLLAMA_MODELS} \
+  && chown -R dapp:dapp ${OLLAMA_MODELS}
+
+COPY --from=agentic /root/.ollama/models/ ${OLLAMA_MODELS}/
 
 ENV ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004"
 

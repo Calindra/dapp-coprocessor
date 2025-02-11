@@ -105,17 +105,18 @@ cartesi-coprocessor address-book
 ```
 
 ```sh
-cartesi-coprocessor address-book
 Machine Hash         0xc604befefeead1aa2dfe897e8e85d7dc058c205049750e071460ded54bf9c2dc
 Devnet_task_issuer   0x95401dc811bb5740090279Ba06cfA8fcF6113778
 Testnet_task_issuer  0xff35E413F5e22A9e1Cc02F92dcb78a5076c1aaf3
 payment_token        0xc5a5C42992dECbae36851359345FE25997F5C42d
 ```
 
-the first arg is the task id, the second arg is the machine hash
+the first arg is the `Devnet_task_issuer`, the second arg is the `Machine Hash`
 
 ```sh
-cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xc604befefeead1aa2dfe897e8e85d7dc058c205049750e071460ded54bf9c2dc
+cd contracts
+cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xee6a33debb38c0e0b4c24801e9a19c7df2db78421ab62d629739ede4f32fdb16
+cd -
 ```
 
 ```sh
@@ -128,10 +129,16 @@ Creating directory to record deployments at "/workspaces/dapp-coprocessor/contra
 ✅ Deployment info saved successfully.
 ```
 
+the `Deployed to` value is the "dapp address"
+
+```sh
+export DAPP_ADDRESS=0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f
+```
+
 Send an input:
 
 ```sh
-cast send 0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f "runExecution(bytes)" 0xdeadbeef \
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0xdeadbeef \
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
@@ -143,4 +150,43 @@ You should see something like this log below on the operator terminal
 [INFO  actix_web::middleware::logger] 127.0.0.1 "POST /finish HTTP/1.1" 200 344 "-" "node" 0.031488
 Received finish status 200
 Received advance request data {"metadata":{"chain_id":0,"app_contract":"0x0000000000000000000000000000000000000000","msg_sender":"0x0000000000000000000000000000000000000000","block_number":0,"block_timestamp":0,"prev_randao":"0x0000000000000000000000000000000000000000000000000000000000000000","input_index":0},"payload":"0xdeadbeef"}
+```
+
+new hash
+
+cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0x080f4506b004934952e5fa3d3cd0626c0a1768133d7c407f12d8cbee9c2c8a44
+
+new "deployed to" 0x922D6956C99E12DFeB3224DEA977D0939758A1Fe
+
+```sh
+export DAPP_ADDRESS=0x922D6956C99E12DFeB3224DEA977D0939758A1Fe
+```
+
+start ollama
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6e6f687570202e2f6f6c6c616d61207365727665203e202f746d702f6f6c6c616d612e6c6f6720323e26312026 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x736c656570203130 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+cat logs
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x636174202f746d702f6f6c6c616d612e6c6f67 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+send hi
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6c6c6d206869 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
