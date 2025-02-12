@@ -43,6 +43,8 @@ GIT::  Submodule path 'contracts/lib/forge-std': checked out 'b93cf4bc34ff214c09
 ✅ Cartesi-Coprocessor devnet environment started.
 ```
 
+## Publish the dapp
+
 After running:
 
 ```sh
@@ -115,12 +117,14 @@ CARIZE::  Cumulative size extracted to output.size successfully!
 docker logs -f cartesi-coprocessor-operator
 ```
 
+## Deploy contract
+
 ```sh
 cartesi-coprocessor address-book
 ```
 
 ```sh
-Machine Hash         0xe9c0197749b770317739c5412a24d21ee8bac7678ca58b19e1abd57d70bc2477
+Machine Hash         0xf21ff2bf2c197dde50241077210819e21a2d117ca63e91cba091861f35255bc4
 Devnet_task_issuer   0x95401dc811bb5740090279Ba06cfA8fcF6113778
 Testnet_task_issuer  0xff35E413F5e22A9e1Cc02F92dcb78a5076c1aaf3
 payment_token        0xc5a5C42992dECbae36851359345FE25997F5C42d
@@ -130,7 +134,7 @@ the first arg is the `Devnet_task_issuer`, the second arg is the `Machine Hash`
 
 ```sh
 cd contracts
-cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xe9c0197749b770317739c5412a24d21ee8bac7678ca58b19e1abd57d70bc2477
+cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xf21ff2bf2c197dde50241077210819e21a2d117ca63e91cba091861f35255bc4
 cd -
 ```
 
@@ -266,12 +270,27 @@ cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6c73202d6c6168202f746d70 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6563686f2022686922203e206f6c6c616d612e6c6f67 \
+echo "hi"
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6563686f2022686922 \
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
 
+echo "hi2"
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6563686f202268693222 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+After this command below the system stops:
+
+echo "hi" > /tmp/ollama.log
+
+```sh
 cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6563686f2022686922203e202f746d702f6f6c6c616d612e6c6f67 \
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-
-
+```

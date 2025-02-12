@@ -47,6 +47,7 @@ const exampleFetcher = async (prompt) => {
 
 
 async function handle_advance(data) {
+  const start = Date.now()
   try {
     console.log('starting ollama serve');
     const output = await runCommand('nohup ./ollama serve > /dev/null 2>&1 &');
@@ -63,7 +64,7 @@ async function handle_advance(data) {
   if (decodedString.startsWith("llm")) {
     await setTimeout(10_000);
     await exampleFetcher(decodedString.replace(/^llm/, "").trim());
-    console.log('Sending accept after the LLM')
+    console.log('Sending accept after the LLM', (Date.now() - start), "ms")
     return "accept"
   }
 
