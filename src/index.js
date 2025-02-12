@@ -47,6 +47,13 @@ const exampleFetcher = async (prompt) => {
 
 
 async function handle_advance(data) {
+  try {
+    console.log('starting ollama serve');
+    const output = await runCommand('nohup ./ollama serve > /dev/null 2>&1 &');
+    console.log(`Output:\n${output}`);
+  } catch (error) {
+    console.error(error);
+  }
   const hexString = data.payload.substring(2); // "Hello World" in hex
   const buffer = Buffer.from(hexString, "hex");
   const decodedString = buffer.toString("utf-8");
@@ -69,6 +76,13 @@ async function handle_advance(data) {
 }
 
 async function handle_inspect(data) {
+  try {
+    console.log('Inspect -> starting ollama serve');
+    const output = await runCommand('nohup ./ollama serve &');
+    console.log(`Output:\n${output}`);
+  } catch (error) {
+    console.error(error);
+  }
   console.log("Received inspect request data " + JSON.stringify(data));
   return "accept";
 }

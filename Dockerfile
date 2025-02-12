@@ -73,6 +73,8 @@ RUN <<EOF
   touch /tmp/ollama.log
   chmod --verbose 777 /tmp/ollama.log
   chown --verbose dapp:dapp /tmp/ollama.log
+  echo "hi" > ollama.log
+
 EOF
 
 ENV ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004"
