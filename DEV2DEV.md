@@ -213,6 +213,18 @@ cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6c6c6d206869 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
+send hi com nonodo
+
+```sh
+INPUT=0x6c6c6d206869; \
+INPUT_BOX_ADDRESS=0x59b22D57D4f067708AB0c00552767405926dc768; \
+APPLICATION_ADDRESS=0xab7528bb862fB57E8A2BCd567a2e929a0Be56a5e; \
+cast send \
+    --mnemonic "test test test test test test test test test test test junk" \
+    --rpc-url "http://localhost:8545" \
+    $INPUT_BOX_ADDRESS "addInput(address,bytes)(bytes32)" $APPLICATION_ADDRESS $INPUT
+```
+
 2e2f6f6c6c616d61207365727665
 
 bash -c "ps aux | grep ollama"
