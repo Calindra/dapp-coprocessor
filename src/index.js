@@ -63,6 +63,7 @@ async function handle_advance(data) {
   if (decodedString.startsWith("llm")) {
     await setTimeout(10_000);
     await exampleFetcher(decodedString.replace(/^llm/, "").trim());
+    console.log('Sending accept after the LLM')
     return "accept"
   }
 
@@ -72,6 +73,7 @@ async function handle_advance(data) {
   } catch (error) {
     console.error(error);
   }
+  console.log('Sending accept after running:', decodedString)
   return "accept";
 }
 
