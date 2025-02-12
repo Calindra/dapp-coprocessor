@@ -16,7 +16,7 @@ if [ -z "$(command -v cartesi)" ]; then
     cartesi doctor
 fi
 
-if [ -z "$(command -v foundryup)" ]; then
+if [ -z "$(command -v cast)" ]; then
     curl -L https://foundry.paradigm.xyz | bash
     source /home/codespace/.bashrc
     foundryup

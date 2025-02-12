@@ -28,7 +28,7 @@ RUN yarn install && yarn build
 FROM --platform=linux/riscv64 cartesi/node:20.16.0-jammy-slim
 
 LABEL io.cartesi.rollups.sdk_version=0.11.1
-LABEL io.cartesi.rollups.ram_size=128Mi
+LABEL io.cartesi.rollups.ram_size=1024Mi
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN <<EOF

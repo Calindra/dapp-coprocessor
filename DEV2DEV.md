@@ -90,7 +90,7 @@ CARIZE:: CAR and JSON files successfully created!
 CARIZE::  Cumulative size extracted to output.size successfully!
 ✅ CARIZE generated successfully.
 ✅ File uploaded successfully!
-⠙ Waiting for solver to finish publication process...                                                                                            ✅ Successfully published your program with machine hash c604befefeead1aa2dfe897e8e85d7dc058c205049750e071460ded54bf9c2dc
+⠙ Waiting for solver to finish publication process...                                                                                            ✅ Successfully published your program with machine hash cf3a4c7609b9238412ff5ef1871d66b31db03ed360d51fe6fcc89c1b1ef8b4b7
 ✅ RESPONSE:: {"operator_ids_with_states":{"931a13987a36a6508d2ade6961f55d97209a7b42f66a7f0fdd899dea8fcb7d4d":"ready"}}
 ```
 
@@ -105,7 +105,7 @@ cartesi-coprocessor address-book
 ```
 
 ```sh
-Machine Hash         0xc604befefeead1aa2dfe897e8e85d7dc058c205049750e071460ded54bf9c2dc
+Machine Hash         0xffd3c92c05ba39b9ed4c6d9a3c46912983d13c173444277ac1285c4b26a3dbed
 Devnet_task_issuer   0x95401dc811bb5740090279Ba06cfA8fcF6113778
 Testnet_task_issuer  0xff35E413F5e22A9e1Cc02F92dcb78a5076c1aaf3
 payment_token        0xc5a5C42992dECbae36851359345FE25997F5C42d
@@ -115,7 +115,7 @@ the first arg is the `Devnet_task_issuer`, the second arg is the `Machine Hash`
 
 ```sh
 cd contracts
-cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xee6a33debb38c0e0b4c24801e9a19c7df2db78421ab62d629739ede4f32fdb16
+cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xffd3c92c05ba39b9ed4c6d9a3c46912983d13c173444277ac1285c4b26a3dbed
 cd -
 ```
 
@@ -159,7 +159,7 @@ cartesi-coprocessor deploy --contract-name MyContract --network devnet --constru
 new "deployed to" 0x922D6956C99E12DFeB3224DEA977D0939758A1Fe
 
 ```sh
-export DAPP_ADDRESS=0x922D6956C99E12DFeB3224DEA977D0939758A1Fe
+export DAPP_ADDRESS=0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07
 ```
 
 start ollama
@@ -169,6 +169,8 @@ cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6e6f687570202e2f6f6c6c616d612073
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
+
+sleep 10
 
 ```sh
 cast send $DAPP_ADDRESS "runExecution(bytes)" 0x736c656570203130 \
@@ -214,6 +216,29 @@ whoami
 
 ```sh
 cast send $DAPP_ADDRESS "runExecution(bytes)" 0x77686f616d69 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6c73202d6c61202f7573722f73686172652f6f6c6c616d612f2e6f6c6c616d612f6d6f64656c73 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+ollama ls
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x2e2f6f6c6c616d61206c73 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+cat /proc/meminfo
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x636174202f70726f632f6d656d696e666f \
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
