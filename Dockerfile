@@ -18,7 +18,10 @@ FROM node:20.16.0-bookworm AS build-stage
 
 WORKDIR /opt/cartesi/dapp
 COPY . .
-RUN yarn install && yarn build
+RUN <<EOF
+  npm ci
+  npm run build
+EOF
 
 # runtime stage: produces final image that will be executed
 
@@ -48,20 +51,29 @@ RUN dpkg -i /machine-emulator-tools-v${MACHINE_EMULATOR_TOOLS_VERSION}.deb \
 ENV PATH="/opt/cartesi/bin:${PATH}"
 
 WORKDIR /opt/cartesi/dapp
-COPY --from=build-stage /opt/cartesi/dapp/dist .
+COPY --chown=dapp:dapp --from=build-stage /opt/cartesi/dapp/dist .
 
-ADD https://s3.us-east-1.amazonaws.com/s3.ai.eitri.tech/ollama .
-RUN chmod +x ./ollama
+ADD \
+  --chown=dapp:dapp \
+  --chmod=+x \
+  --checksum=sha256:83436eb5a903021837896fcc5265ff4bfe4f07d9c0231f569de7bc415f1cd4bf \
+  https://s3.us-east-1.amazonaws.com/s3.ai.eitri.tech/ollama .
 
 ENV CUDA_VISIBLE_DEVICES="-1"
 
 ENV OLLAMA_MODELS=/usr/share/ollama/.ollama/models
-RUN mkdir -p ${OLLAMA_MODELS} \
-  && chown -R dapp:dapp ${OLLAMA_MODELS}
+RUN <<EOF
+  mkdir -p --verbose ${OLLAMA_MODELS}
+  chown -R --verbose dapp:dapp ${OLLAMA_MODELS}
+EOF
 
 COPY --from=agentic /root/.ollama/models/ ${OLLAMA_MODELS}/
 
-RUN touch /tmp/ollama.log && chmod 777 /tmp/ollama.log
+RUN <<EOF
+  touch /tmp/ollama.log
+  chmod --verbose 777 /tmp/ollama.log
+  chown --verbose dapp:dapp /tmp/ollama.log
+EOF
 
 ENV ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004"
 

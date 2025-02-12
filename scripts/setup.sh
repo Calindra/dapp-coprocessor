@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eux
 
@@ -18,7 +18,7 @@ fi
 
 if [ -z "$(command -v cast)" ]; then
     curl -L https://foundry.paradigm.xyz | bash
-    source /home/codespace/.bashrc
+    source ~/.bashrc
     foundryup
 fi
 
@@ -32,7 +32,7 @@ docker buildx rm --force --all-inactive
 docker buildx prune --all --force && docker system prune --volumes --force
 
 echo "Install Rust"
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 . "$HOME/.cargo/env"
 
 echo "Install coprocessor cli"
