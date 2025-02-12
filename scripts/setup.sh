@@ -2,6 +2,8 @@
 
 set -eux
 
+git config pull.rebase falsegit pu
+
 export BUILDX_PROGRESS=plain
 export BUILDKIT_PROGRESS=plain
 
