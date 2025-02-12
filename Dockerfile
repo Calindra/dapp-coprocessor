@@ -55,7 +55,7 @@ COPY --chown=dapp:dapp --from=build-stage /opt/cartesi/dapp/dist .
 
 ADD \
   --chown=dapp:dapp \
-  --chmod=+x \
+  --chmod=755 \
   --checksum=sha256:83436eb5a903021837896fcc5265ff4bfe4f07d9c0231f569de7bc415f1cd4bf \
   https://s3.us-east-1.amazonaws.com/s3.ai.eitri.tech/ollama .
 
