@@ -1,3 +1,18 @@
+# DEV2DEV
+
+## Ollama RISC-V [Optional]
+
+If you need compile ollama using Dockerfile.ollama:
+
+```sh
+echo "Compile ollama"
+rm -rfv ./ollama
+docker build -t builder-riscv64 -f Dockerfile.ollama .
+docker rm builder-riscv64-container || true
+docker create --name builder-riscv64-container builder-riscv64
+docker cp builder-riscv64-container:/opt/build/ollama ./ollama
+docker rm builder-riscv64-container
+```
 
 after running:
 
@@ -21,10 +36,10 @@ GIT::  Submodule path 'contracts/lib/forge-std': checked out 'b93cf4bc34ff214c09
 ✅  Successfully updated submodules.
 ✅ Successfully built Devnet containers.
 ✅ Successfully pulled changes to Devnet containers.
-⠙ Starting devnet containers...                                                                                                                  
-⠹ Starting devnet containers...                                                                                                                  
-⠸ Starting devnet containers...                                                                                                                  
-⠼ Starting devnet containers...                                                                                                                  
+⠙ Starting devnet containers...
+⠹ Starting devnet containers...
+⠸ Starting devnet containers...
+⠼ Starting devnet containers...
 ✅ Cartesi-Coprocessor devnet environment started.
 ```
 
@@ -37,7 +52,7 @@ cartesi-coprocessor publish --network devnet
 Output:
 
 ```sh
-CARTESI:: 
+CARTESI::
          .
         / \
       /    \
