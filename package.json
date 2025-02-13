@@ -4,14 +4,20 @@
   "description": "JS DApp",
   "type": "module",
   "dependencies": {
-    "ethers": "^6.7.1"
+    "@wagmi/cli": "^2.2.0",
+    "viem": "^2.23.2"
   },
   "devDependencies": {
-    "esbuild": "^0.19.2"
+    "@cartesi/rollups": "^1.4.3",
+    "@sunodo/wagmi-plugin-hardhat-deploy": "^0.3.0",
+    "@types/node": "^20.17.18",
+    "esbuild": "^0.19.2",
+    "solc": "^0.8.0"
   },
   "scripts": {
     "build": "esbuild ./src/index.js --bundle --outfile=dist/index.js --platform=node --target=node20",
-    "start": "ROLLUP_HTTP_SERVER_URL=\"http://127.0.0.1:5004\" node src/index.js"
+    "start": "ROLLUP_HTTP_SERVER_URL=\"http://127.0.0.1:5004\" node src/index.js",
+    "codegen": "wagmi generate --config wagmi.config.js"
   },
   "keywords": [
     "cartesi"
