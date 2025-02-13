@@ -33,9 +33,11 @@ fi
 docker buildx rm --force --all-inactive
 docker buildx prune --all --force && docker system prune --volumes --force
 
-echo "Install Rust"
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-. "$HOME/.cargo/env"
+if [ -z "$(command -v rustc)" ]; then
+    echo "Install Rust"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    . "$HOME/.cargo/env"
+fi
 
 echo "Install coprocessor cli"
 cargo install cartesi-coprocessor
