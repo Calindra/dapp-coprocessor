@@ -124,7 +124,7 @@ cartesi-coprocessor address-book
 ```
 
 ```sh
-Machine Hash         0xf21ff2bf2c197dde50241077210819e21a2d117ca63e91cba091861f35255bc4
+Machine Hash         0x1adf1090410643d0894bfd378c20241aa3b1e724496d329a3fe58076015f2d2b
 Devnet_task_issuer   0x95401dc811bb5740090279Ba06cfA8fcF6113778
 Testnet_task_issuer  0xff35E413F5e22A9e1Cc02F92dcb78a5076c1aaf3
 payment_token        0xc5a5C42992dECbae36851359345FE25997F5C42d
@@ -134,7 +134,7 @@ the first arg is the `Devnet_task_issuer`, the second arg is the `Machine Hash`
 
 ```sh
 cd contracts
-cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xf21ff2bf2c197dde50241077210819e21a2d117ca63e91cba091861f35255bc4
+cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xee536c97bf5e0aeddefbeaf9893cc98e02efbfd444067f0bb9f9e1b91384fe2d
 cd -
 ```
 
@@ -303,6 +303,30 @@ echo "hi" > /tmp/ollama.log
 
 ```sh
 cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6563686f2022686922203e202f746d702f6f6c6c616d612e6c6f67 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+echo "hi3"
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6563686f202268693322 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+echo "hi4"
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6563686f202268693422 \
+    --rpc-url http://127.0.0.1:8545 \
+    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+llm hello
+
+```sh
+cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6c6c6d2068656c6c6f \
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
