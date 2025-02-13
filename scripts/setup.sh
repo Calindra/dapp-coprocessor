@@ -2,7 +2,7 @@
 
 set -eux
 
-git config pull.rebase falsegit pu
+git config pull.rebase false
 
 export BUILDX_PROGRESS=plain
 export BUILDKIT_PROGRESS=plain
