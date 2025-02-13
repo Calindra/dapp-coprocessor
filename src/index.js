@@ -44,17 +44,16 @@ const exampleFetcher = async (prompt) => {
   }
 };
 
-
 async function handle_advance(data) {
-  const start = Date.now()
+  const start = Date.now();
   try {
-    console.log('starting ollama serve');
-    const output = await runCommand('nohup ./ollama serve > /dev/null 2>&1 &');
+    console.log("starting ollama serve");
+    const output = await runCommand("nohup ./ollama serve > /dev/null 2>&1 &");
     console.log(`Output:\n${output}`);
   } catch (error) {
     console.error(error);
   }
-  const hexString = data.payload.substring(2); // "Hello World" in hex
+  const hexString = data.payload.substring(2);
   const buffer = Buffer.from(hexString, "hex");
   const decodedString = buffer.toString("utf-8");
   console.log("Advance decoded string", decodedString);
@@ -63,8 +62,8 @@ async function handle_advance(data) {
   if (decodedString.startsWith("llm")) {
     await setTimeout(10_000);
     await exampleFetcher(decodedString.replace(/^llm/, "").trim());
-    console.log('Sending accept after the LLM', (Date.now() - start), "ms")
-    return "accept"
+    console.log("Sending accept after the LLM", Date.now() - start, "ms");
+    return "accept";
   }
 
   try {
@@ -73,14 +72,14 @@ async function handle_advance(data) {
   } catch (error) {
     console.error(error);
   }
-  console.log('Sending accept after running:', decodedString)
+  console.log("Sending accept after running:", decodedString);
   return "accept";
 }
 
 async function handle_inspect(data) {
   try {
-    console.log('Inspect -> starting ollama serve');
-    const output = await runCommand('nohup ./ollama serve &');
+    console.log("Inspect -> starting ollama serve");
+    const output = await runCommand("nohup ./ollama serve &");
     console.log(`Output:\n${output}`);
   } catch (error) {
     console.error(error);
@@ -89,14 +88,13 @@ async function handle_inspect(data) {
   return "accept";
 }
 
-var handlers = {
+const handlers = {
   advance_state: handle_advance,
   inspect_state: handle_inspect,
 };
 
-var finish = { status: "accept" };
-
 (async () => {
+  let finish = { status: "accept" };
   while (true) {
     const finish_req = await fetch(rollup_server + "/finish", {
       method: "POST",
@@ -112,7 +110,7 @@ var finish = { status: "accept" };
       console.log("No pending rollup request, trying again");
     } else {
       const rollup_req = await finish_req.json();
-      var handler = handlers[rollup_req["request_type"]];
+      const handler = handlers[rollup_req["request_type"]];
       finish["status"] = await handler(rollup_req["data"]);
     }
   }
