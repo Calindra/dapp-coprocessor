@@ -23,34 +23,44 @@ contract FootballTeam {
 
     // Function to add a team
     function addTeam(
-        uint256 teamId,
         string memory teamName,
-        string memory goalkeeperName, uint256 goalkeeperLevel,
-        string[] memory defenseNames, uint256[] memory defenseLevels,
-        string[] memory middleNames, uint256[] memory middleLevels,
-        string[] memory attackNames, uint256[] memory attackLevels
-    ) public {
+        Player memory goalkeeper,
+        Player[] memory defense,
+        Player[] memory middle,
+        Player[] memory attack
+    ) public returns (uint256) {
         // Initialize the team
+        uint256 teamId = uint256(keccak256(
+            abi.encode(
+                teamName,
+                goalkeeper,
+                defense,
+                middle,
+                attack
+            )
+        ));
         Team storage team = teams[teamId];
         team.name = teamName;
 
         // Set the goalkeeper
-        team.goalkeeper = Player(goalkeeperName, goalkeeperLevel);
+        team.goalkeeper = goalkeeper;
 
         // Add defense players
-        for (uint256 i = 0; i < defenseNames.length; i++) {
-            team.defense.push(Player(defenseNames[i], defenseLevels[i]));
+        for (uint256 i = 0; i < defense.length; i++) {
+            team.defense.push(defense[i]);
         }
 
         // Add middle players
-        for (uint256 i = 0; i < middleNames.length; i++) {
-            team.middle.push(Player(middleNames[i], middleLevels[i]));
+        for (uint256 i = 0; i < middle.length; i++) {
+            team.middle.push(middle[i]);
         }
 
         // Add attack players
-        for (uint256 i = 0; i < attackNames.length; i++) {
-            team.attack.push(Player(attackNames[i], attackLevels[i]));
+        for (uint256 i = 0; i < attack.length; i++) {
+            team.attack.push(attack[i]);
         }
+
+        return teamId;
     }
 
     // Function to get a team name by team ID
