@@ -24,7 +24,7 @@ contract MyContract is CoprocessorAdapter {
         FootballTeam.Player[] memory defense,
         FootballTeam.Player[] memory middle,
         FootballTeam.Player[] memory attack
-    ) external {
+    ) external returns (uint256) {
         uint256 teamId = footballTeam.addTeam(
             teamName,
             goalkeeper,
@@ -34,6 +34,7 @@ contract MyContract is CoprocessorAdapter {
         );
 
         emit TeamCreated(teamId);
+        return teamId;
     }
 
     // maybe change to msg.sender

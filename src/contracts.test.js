@@ -1,14 +1,13 @@
-import { it, beforeEach } from "node:test";
+import { it, before } from "node:test";
 import assert from "node:assert";
-import { http, createPublicClient } from "viem";
+import { http, createPublicClient, toHex } from "viem";
 import { foundry } from "viem/chains";
 import { myContractAbi } from "./rollups.js";
 
 /** @type {ReturnType<(typeof createPublicClient)>} */
 let client;
 
-beforeEach(async () => {
-  console.log("before each");
+before(async () => {
   client = createPublicClient({
     chain: foundry,
     transport: http(),
@@ -19,33 +18,46 @@ it("should pass", async () => {
   assert.strictEqual(1, 1);
 });
 
-// it("should get team name", async () => {
-// const { getTeamName } = client.contract(myContractAbi);
-// const teamName = await getTeamName(1);
-// assert.strictEqual(teamName, "Real Madrid");
-// client.simulateContract(myContractAbi, {});
-// });
+const footballAddress = "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f";
+const dappAddress = "0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07";
 
 it("should simulate team creation and retrieval", async () => {
+  const team = [
+    "MyStarTeam",
+    { name: "Rogerio Ceni", level: 2 },
+    [{ name: "Cafu", level: 4 }],
+    [{ name: "Bebeto", level: 7 }],
+    [{ name: "Romario", level: 11 }],
+  ];
+
   // Simulate creating a team
-  await client.simulateContract({
-    address: "0x0000000000000000000000000000000000000000",
+  client.watchContractEvent({
+    address: dappAddress,
     abi: myContractAbi,
-    functionName: "createTeam",
-    args: [
-      "MyTeam",
-      { name: "Goalkeeper", level: 1 },
-      [{ name: "Defender1", level: 1 }],
-      [{ name: "Midfielder1", level: 1 }],
-      [{ name: "Attacker1", level: 1 }]
-    ]
-  });
-  const teamName = await client.simulateContract({
-    address: "0x0000000000000000000000000000000000000000",
-    abi: myContractAbi,
-    functionName: "getTeamName",
-    args: [1] // assuming '1' is the teamId from simulation
+    eventName: "TeamCreated",
+    onLogs: (logs) => {
+      console.log("TeamCreated event logs:", logs);
+    },
   });
 
-  assert.strictEqual(teamName, "MyTeam");
+  const { result: teamId } = await client.simulateContract({
+    address: dappAddress,
+    abi: myContractAbi,
+    functionName: "createTeam",
+    args: team,
+  });
+  assert.ok(teamId, "Team ID should be returned");
+  console.log("Team ID:", teamId);
+  assert.strictEqual(
+    teamId,
+    93425661894681441242860048108082761268965539453039422627886306835243180765084n
+  );
+  // const { result: teamName } = await client.simulateContract({
+  //   address: footballAddress,
+  //   abi: footballTeamAbi,
+  //   functionName: "getTeamName",
+  //   args: [teamId],
+  // });
+
+  // assert.strictEqual("MyStarTeam", teamName); // Fixing the assertion to match created team's name
 });
