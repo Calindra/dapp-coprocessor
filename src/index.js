@@ -2,6 +2,7 @@
 // it will be used by any DApp, so we are already including it here
 import { exec } from "node:child_process";
 import { setTimeout } from "node:timers/promises";
+import { runGame } from "./game.js";
 
 const rollup_server = process.env.ROLLUP_HTTP_SERVER_URL;
 console.log("HTTP rollup_server url is " + rollup_server);
@@ -57,6 +58,10 @@ async function handle_advance(data) {
   const buffer = Buffer.from(hexString, "hex");
   const decodedString = buffer.toString("utf-8");
   console.log("Advance decoded string", decodedString);
+  if (decodedString.startsWith("{")) {
+    await runGame(JSON.parse(decodedString));
+    return "accept";
+  }
   console.log("Received advance request data " + JSON.stringify(data));
 
   if (decodedString.startsWith("llm")) {
