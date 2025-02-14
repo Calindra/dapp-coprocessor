@@ -148,10 +148,10 @@ it("should play a match", async () => {
   assert.ok(result, "Write contract should return a result");
   const hashCreateTeam = await wallet.writeContract(requestCreateTeam);
   assert.ok(hashCreateTeam, "Transaction hash should be returned");
-  console.log("Team Create Result:", result);
+  console.log("Team Create Result:", toHex(result));
   console.log("Transaction hash:", hashCreateTeam);
 
-  const { result: resultTeam } = await client.simulateContract({
+  const resultTeam = await client.readContract({
     address: dappAddress,
     abi: myContractAbi,
     functionName: "getTeam",
@@ -224,7 +224,7 @@ it("should play a match", async () => {
   assert.ok(hashSetTeam, "Transaction hash should be returned");
   console.log("Transaction hash:", hashSetTeam);
 
-  const { request: getTeam } = await client.simulateContract({
+  const getTeam = await client.readContract({
     address: dappAddress,
     abi: myContractAbi,
     functionName: "getTeam",
@@ -242,7 +242,7 @@ it("should play a match", async () => {
       toHex(beacon.signature),
       toHex(beacon.previous_signature),
     ],
-    teamHash,
+    teamAbi,
   ];
 
   // Simulate playing a team
