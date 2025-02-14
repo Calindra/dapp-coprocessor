@@ -131,6 +131,7 @@ it.skip("should simulate team creation and retrieval", async () => {
 });
 
 it("should play a match", async () => {
+  const fnName = "playMatch";
   const teamName = "MyStarTeam";
   const goalkeeper = { name: "Rogerio Ceni", level: 2n };
   const defense = [{ name: "Cafu", level: 4n }];
@@ -195,20 +196,22 @@ it("should play a match", async () => {
   console.log("Team ABI:", teamAbi);
   console.log("Team Hash:", teamHash);
 
+  const contractArguments = [
+    [
+      beacon.round,
+      toHex(beacon.randomness),
+      toHex(beacon.signature),
+      toHex(beacon.previous_signature),
+    ],
+    teamHash,
+  ];
+
   // Simulate playing a team
   const { request } = await client.simulateContract({
     address: dappAddress,
     abi: myContractAbi,
-    functionName: "playMatch",
-    args: [
-      [
-        beacon.round,
-        toHex(beacon.randomness),
-        toHex(beacon.signature),
-        toHex(beacon.previous_signature),
-      ],
-      teamHash,
-    ],
+    functionName: fnName,
+    args: contractArguments,
     account,
   });
   // @ts-ignore
