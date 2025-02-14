@@ -30,7 +30,7 @@ contract FootballTeam {
         Player[] memory attack
     ) public returns (uint256) {
         // Initialize the team
-        uint256 teamId = uint256(keccak256(
+        uint256 teamHash = uint256(keccak256(
             abi.encode(
                 teamName,
                 goalkeeper,
@@ -39,7 +39,7 @@ contract FootballTeam {
                 attack
             )
         ));
-        Team storage team = teams[teamId];
+        Team storage team = teams[teamHash];
         team.name = teamName;
 
         // Set the goalkeeper
@@ -60,7 +60,7 @@ contract FootballTeam {
             team.attack.push(attack[i]);
         }
 
-        return teamId;
+        return teamHash;
     }
 
     // Function to get a team name by team ID

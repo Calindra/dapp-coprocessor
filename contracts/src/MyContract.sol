@@ -10,7 +10,7 @@ interface INFTPlayers {
 
 contract MyContract is CoprocessorAdapter {
     INFTPlayers public nftContract;
-    mapping(address => bytes) internal matches;
+    mapping(address => bytes32) internal matches;
     FootballTeam public footballTeam;
 
     struct Beacon {
@@ -29,7 +29,7 @@ contract MyContract is CoprocessorAdapter {
     event ResultReceived(bytes32 payloadHash, bytes output);
     event TeamSet(address indexed teamAddress, bytes teamHash);
     event TeamCreated(uint256 teamHash);
-    event MatchCreated(uint256 matchHash);
+    event MatchCreated();
 
     constructor(
         address _taskIssuerAddress,
@@ -38,21 +38,11 @@ contract MyContract is CoprocessorAdapter {
         footballTeam = new FootballTeam();
     }
 
-    function playMatch(Match memory group) external returns (uint256) {
-        uint256 matchHash = uint256(keccak256(
-            abi.encodePacked(
-                group.beacon.round,
-                group.beacon.randomness
-            )
-        ));
-        bytes memory groupEncoded = abi.encode(group);
-
-        matches[msg.sender] = groupEncoded;
-        emit MatchCreated(matchHash);
-
-        // callCoprocessor(groupEncoded);
-
-        return matchHash;
+    function playMatch(Beacon memory beacon, bytes memory team) external {
+        require(matches[msg.sender] == keccak256(team), "Team is different");
+        bytes memory groupEncoded = abi.encode(beacon, team);
+        callCoprocessor(groupEncoded);
+        emit MatchCreated();
     }
 
     function createTeam(
@@ -62,7 +52,7 @@ contract MyContract is CoprocessorAdapter {
         FootballTeam.Player[] memory middle,
         FootballTeam.Player[] memory attack
     ) external returns (uint256) {
-        uint256 teamId = footballTeam.addTeam(
+        uint256 teamHash = footballTeam.addTeam(
             teamName,
             goalkeeper,
             defense,
@@ -70,14 +60,13 @@ contract MyContract is CoprocessorAdapter {
             attack
         );
 
-        emit TeamCreated(teamId);
-        return teamId;
+        emit TeamCreated(teamHash);
+        return teamHash;
     }
 
-    // maybe change to msg.sender
-    function setTeam(bytes memory teamHash, address me) external {
-        matches[me] = teamHash;
-        emit TeamSet(me, teamHash);
+    function setTeam(bytes memory teamPayload) external {
+        matches[msg.sender] = keccak256(teamPayload);
+        emit TeamSet(msg.sender, teamPayload);
         // match.hash = teamHash;
     }
 
