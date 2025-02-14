@@ -147,25 +147,6 @@ it("should play a match", async () => {
       "02820ac3e778b52d1dfd60283ac92798ba53496e1809e594a08bd6bef2de8686",
   };
 
-  const beaconAbi = encodeAbiParameters(
-    [
-      { name: "round", internalType: "uint256", type: "uint256" },
-      { name: "randomness", internalType: "bytes", type: "bytes" },
-      { name: "signature", internalType: "bytes", type: "bytes" },
-      {
-        name: "previousSignature",
-        internalType: "bytes",
-        type: "bytes",
-      },
-    ],
-    [
-      beacon.round,
-      toHex(beacon.randomness),
-      toHex(beacon.signature),
-      toHex(beacon.previous_signature),
-    ]
-  );
-
   const teamAbi = encodeAbiParameters(
     [
       { name: "teamName", internalType: "string", type: "string" },
@@ -211,7 +192,6 @@ it("should play a match", async () => {
 
   const teamHash = keccak256(teamAbi);
 
-  console.log("Beacon ABI:", beaconAbi);
   console.log("Team ABI:", teamAbi);
   console.log("Team Hash:", teamHash);
 
@@ -220,7 +200,15 @@ it("should play a match", async () => {
     address: dappAddress,
     abi: myContractAbi,
     functionName: "playMatch",
-    args: [beacon, teamHash],
+    args: [
+      [
+        beacon.round,
+        toHex(beacon.randomness),
+        toHex(beacon.signature),
+        toHex(beacon.previous_signature),
+      ],
+      teamHash,
+    ],
     account,
   });
   // @ts-ignore
