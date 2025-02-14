@@ -3,7 +3,7 @@ import assert from "node:assert";
 import { mnemonicToAccount } from "viem/accounts";
 import { http, createPublicClient, createWalletClient, toHex } from "viem";
 import { foundry } from "viem/chains";
-import { myContractAbi } from "./rollups.js";
+import { myContractAbi, footballTeamAbi } from "./rollups.js";
 
 /** @type {ReturnType<(typeof createPublicClient)>} */
 let client;
@@ -45,10 +45,11 @@ it("should simulate team creation and retrieval", async () => {
   client.watchContractEvent({
     address: dappAddress,
     abi: myContractAbi,
-    eventName: "TeamCreated",
-    onError: (error) => console.error(error),
+    onError: (error) => {
+      console.error("Error Events Logs:", error)
+    },
     onLogs: (logs) => {
-      console.log("TeamCreated event logs:", logs);
+      console.log("Event logs:", logs);
     },
   });
 
@@ -57,13 +58,15 @@ it("should simulate team creation and retrieval", async () => {
     abi: myContractAbi,
     functionName: "createTeam",
     args: team,
+    account,
   });
   assert.ok(teamId, "Team ID should be returned");
   // @ts-ignore
   const hash = await wallet.writeContract(request);
   assert.ok(hash, "Transaction hash should be returned");
   const teamIdHex = toHex(teamId);
-  console.log("Team ID:", teamIdHex);
+  // 0xce8d0cfd5165bac9ab98b7f4ac03ed1af41de1cb88502920a07b364cbe542f9c
+  console.log("Team ID:", teamIdHex, "\nTransaction hash:", hash);
   assert.strictEqual(
     teamId,
     93425661894681441242860048108082761268965539453039422627886306835243180765084n
