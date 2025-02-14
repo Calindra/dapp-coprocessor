@@ -8,6 +8,9 @@ dependencies:
   '@wagmi/cli':
     specifier: ^2.2.0
     version: 2.2.0
+  seedrandom:
+    specifier: ^3.0.5
+    version: 3.0.5
   viem:
     specifier: ^2.23.2
     version: 2.23.2(zod@3.24.2)
@@ -517,6 +520,10 @@ packages:
   /readdirp@4.1.1:
     resolution: {integrity: sha512-h80JrZu/MHUZCyHu5ciuoI0+WxsCxzxJTILn6Fs8rxSnFPh+UVHYfeIxK1nVGugMqkfC4vJcBOYbkfkwYK0+gw==}
     engines: {node: '>= 14.18.0'}
+    dev: false
+
+  /seedrandom@3.0.5:
+    resolution: {integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==}
     dev: false
 
   /semver@5.7.2:

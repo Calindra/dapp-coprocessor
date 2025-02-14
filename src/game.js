@@ -1,4 +1,5 @@
 import { encodeAbiParameters } from "viem";
+import seedrandom from "seedrandom";
 
 const rollup_server = process.env.ROLLUP_HTTP_SERVER_URL;
 console.log("HTTP rollup_server url is " + rollup_server);
@@ -26,6 +27,7 @@ async function emitNotice(data) {
 
 export async function runGame(match) {
     console.log(`Running a game`, { match })
+    const rnd = seedrandom(match.beacon.randomness)
     const tokenIds = [BigInt(match.teamA.goalkeeper.id)];
     const xpAmounts = [42n];
 
@@ -41,8 +43,8 @@ export async function runGame(match) {
         tokenIds.push(BigInt(p.id))
         xpAmounts.push(79n)
     }
-    const goalsA = 2
-    const goalsB = 3
+    const goalsA = Math.floor(rnd() * 5)
+    const goalsB = Math.floor(rnd() * 5)
     const encodedNotice = encodeAbiParameters(
         [
             { type: 'uint256[]' },
