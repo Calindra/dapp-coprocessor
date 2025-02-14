@@ -80,12 +80,11 @@ it("should simulate team creation", async () => {
     teamId,
     93425661894681441242860048108082761268965539453039422627886306835243180765084n
   );
-  const teamBigId = BigInt(teamId);
   const { result: teamName } = await client.simulateContract({
     address: footballAddress,
     abi: footballTeamAbi,
     functionName: "getTeamName",
-    args: [teamBigId],
+    args: [teamId],
     account,
   });
 
