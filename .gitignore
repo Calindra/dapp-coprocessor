@@ -9,3 +9,4 @@ output.cid
 output.size
 .envrc
 rollups.js
+pnpm-lock.yaml
