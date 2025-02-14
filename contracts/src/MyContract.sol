@@ -96,5 +96,12 @@ contract MyContract is CoprocessorAdapter {
         emit ResultReceived(payloadHash, notice);
     }
 
+    function nonodoHandleNotice(
+        bytes32 payloadHash,
+        bytes memory notice
+    ) external {
+        handleNotice(payloadHash, notice);
+    }
+
     // Add your other app logic here
 }
