@@ -15,9 +15,9 @@ contract MyContract is CoprocessorAdapter {
 
     struct Beacon {
         uint256 round;
-        bytes32 randomness;
-        bytes32 signature;
-        bytes32 previousSignature;
+        bytes randomness;
+        bytes signature;
+        bytes previousSignature;
     }
 
     struct Match {

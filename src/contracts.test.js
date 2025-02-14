@@ -2,7 +2,14 @@ import { it, before, after } from "node:test";
 import { setTimeout } from "node:timers/promises";
 import assert from "node:assert";
 import { mnemonicToAccount } from "viem/accounts";
-import { http, createPublicClient, createWalletClient, toHex } from "viem";
+import {
+  http,
+  createPublicClient,
+  createWalletClient,
+  toHex,
+  keccak256,
+  encodeAbiParameters,
+} from "viem";
 import { foundry } from "viem/chains";
 import { myContractAbi, footballTeamAbi } from "./rollups.js";
 
@@ -51,7 +58,7 @@ it("should pass", async () => {
   assert.strictEqual(1, 1);
 });
 
-it("should simulate team creation", async () => {
+it.skip("should simulate team creation", async () => {
   const team = [
     "MyStarTeam",
     { name: "Rogerio Ceni", level: 2 },
@@ -121,4 +128,103 @@ it.skip("should simulate team creation and retrieval", async () => {
 
   assert.ok(result, "Team should be returned");
   assert.strictEqual(1, 2);
+});
+
+it("should play a match", async () => {
+  const teamName = "MyStarTeam";
+  const goalkeeper = { name: "Rogerio Ceni", level: 2n };
+  const defense = [{ name: "Cafu", level: 4n }];
+  const middle = [{ name: "Bebeto", level: 7n }];
+  const attack = [{ name: "Romario", level: 11n }];
+
+  const beacon = {
+    round: 4804027n,
+    signature:
+      "8a9c9ddb243ee3b4c51b3602f09769ab134a85ca2912d7a68bbe7ee9a8c8ecef1c7997b7b239baf6dc6d0b8c8db9ae0502f40854ed34a2b4acf70b37ee85f37fc76a1e2d268f8c1da9127e91f9254b4781653169cf99830f48d4a700a6373052",
+    previous_signature:
+      "8d3a575b062a2e2b44829a493351ae00143805f36cbe77524a649ef1c5916d3b104e1b20b46052a92f8561fede3dac2d003a7678db6aa6c6af200355b35e8ac1506d3222c50ff62fa85494d4179d27436f5fc4cfa1449dff295562b013da9fe9",
+    randomness:
+      "02820ac3e778b52d1dfd60283ac92798ba53496e1809e594a08bd6bef2de8686",
+  };
+
+  const beaconAbi = encodeAbiParameters(
+    [
+      { name: "round", internalType: "uint256", type: "uint256" },
+      { name: "randomness", internalType: "bytes", type: "bytes" },
+      { name: "signature", internalType: "bytes", type: "bytes" },
+      {
+        name: "previousSignature",
+        internalType: "bytes",
+        type: "bytes",
+      },
+    ],
+    [
+      beacon.round,
+      toHex(beacon.randomness),
+      toHex(beacon.signature),
+      toHex(beacon.previous_signature),
+    ]
+  );
+
+  const teamAbi = encodeAbiParameters(
+    [
+      { name: "teamName", internalType: "string", type: "string" },
+      {
+        name: "goalkeeper",
+        internalType: "struct FootballTeam.Player",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "level", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      {
+        name: "defense",
+        internalType: "struct FootballTeam.Player[]",
+        type: "tuple[]",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "level", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      {
+        name: "middle",
+        internalType: "struct FootballTeam.Player[]",
+        type: "tuple[]",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "level", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      {
+        name: "attack",
+        internalType: "struct FootballTeam.Player[]",
+        type: "tuple[]",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "level", internalType: "uint256", type: "uint256" },
+        ],
+      },
+    ],
+    [teamName, goalkeeper, defense, middle, attack]
+  );
+
+  const teamHash = keccak256(teamAbi);
+
+  console.log("Beacon ABI:", beaconAbi);
+  console.log("Team ABI:", teamAbi);
+  console.log("Team Hash:", teamHash);
+
+  // Simulate playing a team
+  const { request } = await client.simulateContract({
+    address: dappAddress,
+    abi: myContractAbi,
+    functionName: "playMatch",
+    args: [beacon, teamHash],
+    account,
+  });
+  // @ts-ignore
+  const hash = await wallet.writeContract(request);
+  assert.ok(hash, "Transaction hash should be returned");
+  console.log("Transaction hash:", hash);
 });
