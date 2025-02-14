@@ -138,6 +138,28 @@ it("should play a match", async () => {
   const middle = [{ name: "Bebeto", level: 7n }];
   const attack = [{ name: "Romario", level: 11n }];
 
+  const { result, request: requestCreateTeam } = await client.simulateContract({
+    address: dappAddress,
+    abi: myContractAbi,
+    functionName: "createTeam",
+    args: [teamName, goalkeeper, defense, middle, attack],
+    account,
+  });
+  assert.ok(result, "Write contract should return a result");
+  const hashCreateTeam = await wallet.writeContract(requestCreateTeam);
+  assert.ok(hashCreateTeam, "Transaction hash should be returned");
+  console.log("Team Create Result:", result);
+  console.log("Transaction hash:", hashCreateTeam);
+
+  const { result: resultTeam } = await client.simulateContract({
+    address: dappAddress,
+    abi: myContractAbi,
+    functionName: "getTeam",
+    account,
+  });
+  console.log("Get Team Result:", resultTeam);
+  assert.ok(resultTeam, "Get Team should return a result");
+
   const beacon = {
     round: 4804027n,
     signature:
@@ -191,10 +213,27 @@ it("should play a match", async () => {
     [teamName, goalkeeper, defense, middle, attack]
   );
 
-  const teamHash = keccak256(teamAbi);
+  const { request: requestSetTeam } = await client.simulateContract({
+    address: dappAddress,
+    abi: myContractAbi,
+    functionName: "setTeam",
+    args: [teamAbi],
+    account,
+  });
+  const hashSetTeam = await wallet.writeContract(requestSetTeam);
+  assert.ok(hashSetTeam, "Transaction hash should be returned");
+  console.log("Transaction hash:", hashSetTeam);
 
-  console.log("Team ABI:", teamAbi);
-  console.log("Team Hash:", teamHash);
+  const { request: getTeam } = await client.simulateContract({
+    address: dappAddress,
+    abi: myContractAbi,
+    functionName: "getTeam",
+    account,
+  });
+  assert.ok(getTeam, "Get Team should return a request");
+
+  const teamHash = keccak256(teamAbi);
+  console.log("Team Hash to playMatch:", teamHash);
 
   const contractArguments = [
     [

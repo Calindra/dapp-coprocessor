@@ -27,7 +27,7 @@ contract MyContract is CoprocessorAdapter {
     }
 
     event ResultReceived(bytes32 payloadHash, bytes output);
-    event TeamSet(address indexed teamAddress, bytes teamHash);
+    event TeamSet(address indexed teamAddress, bytes teamPayload);
     event TeamCreated(uint256 teamHash);
     event MatchCreated();
 
@@ -68,6 +68,10 @@ contract MyContract is CoprocessorAdapter {
         matches[msg.sender] = keccak256(teamPayload);
         emit TeamSet(msg.sender, teamPayload);
         // match.hash = teamHash;
+    }
+
+    function getTeam() external view returns (bytes32) {
+        return matches[msg.sender];
     }
 
     function runExecution(bytes memory input) external {
