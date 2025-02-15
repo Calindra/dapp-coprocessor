@@ -134,7 +134,7 @@ the first arg is the `Devnet_task_issuer`, the second arg is the `Machine Hash`
 
 ```sh
 cd contracts
-cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0xee536c97bf5e0aeddefbeaf9893cc98e02efbfd444067f0bb9f9e1b91384fe2d
+cartesi-coprocessor deploy --contract-name MyContract --network devnet --constructor-args 0x95401dc811bb5740090279Ba06cfA8fcF6113778 0x98be235714b878becde7de4b6d1f5bcce81d1ac891828d95826abb887aa793b0
 cd -
 ```
 
@@ -330,3 +330,9 @@ cast send $DAPP_ADDRESS "runExecution(bytes)" 0x6c6c6d2068656c6c6f \
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
+
+## How to point your frontend to codespaces
+
+Open the terminal, click "PORTS", right click to open the 8545.
+
+Copy the https address and configure your metamask.
