@@ -20,8 +20,8 @@ fi
 
 if [ -z "$(command -v cast)" ]; then
     curl -L https://foundry.paradigm.xyz | bash
-    source ~/.bashrc
-    foundryup
+    echo "--->>> Plz execute the commands above"
+    exit 1
 fi
 
 # Check if there are any running containers before trying to stop them
