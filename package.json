@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@wagmi/cli": "^2.2.0",
+    "drand-client": "^1.2.6",
     "seedrandom": "^3.0.5",
     "viem": "^2.23.2"
   },
