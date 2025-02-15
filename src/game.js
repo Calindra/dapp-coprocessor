@@ -1,4 +1,4 @@
-import { encodeAbiParameters } from "viem";
+import { encodeAbiParameters, toBytes, keccak256 } from "viem";
 import seedrandom from "seedrandom";
 
 const rollup_server = process.env.ROLLUP_HTTP_SERVER_URL;
@@ -31,28 +31,38 @@ export async function runGame(match) {
     const tokenIds = [BigInt(match.teamA.goalkeeper.id)];
     const xpAmounts = [42n];
 
+    let teamPowerA = 0;
     for (let p of match.teamA.defense) {
         tokenIds.push(BigInt(p.id))
         xpAmounts.push(51n)
+        teamPowerA += p.level;
     }
     for (let p of match.teamA.middle) {
         tokenIds.push(BigInt(p.id))
         xpAmounts.push(64n)
+        teamPowerA += p.level;
     }
     for (let p of match.teamA.attack) {
         tokenIds.push(BigInt(p.id))
         xpAmounts.push(79n)
+        teamPowerA += p.level;
     }
-    const goalsA = Math.floor(rnd() * 5)
-    const goalsB = Math.floor(rnd() * 5)
+    const teamPowerB = 2.5 * 11;
+    const teamGoalsA = teamPowerA / (teamPowerB + teamPowerA);
+    const teamGoalsB = teamPowerB / (teamPowerB + teamPowerA);
+    const goalsA = Math.floor(rnd() * teamGoalsA * 4.3);
+    const goalsB = Math.floor(rnd() * teamGoalsB * 4.3);
+    const uuidBytes = '0x' + match.reqId.replace(/-/g, "")
+    console.log({ uuidBytes })
     const encodedNotice = encodeAbiParameters(
         [
             { type: 'uint256[]' },
             { type: 'uint256[]' },
             { type: 'uint32' },
             { type: 'uint32' },
+            { type: 'bytes16' },
         ],
-        [tokenIds, xpAmounts, goalsA, goalsB]
+        [tokenIds, xpAmounts, goalsA, goalsB, uuidBytes]
     );
     await emitNotice({ payload: encodedNotice })
 }
